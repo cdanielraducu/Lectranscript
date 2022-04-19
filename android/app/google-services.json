@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "339633717297",
+    "project_id": "lectranscript",
+    "storage_bucket": "lectranscript.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339633717297:android:fa2b47e5b816bef3cb1510",
+        "android_client_info": {
+          "package_name": "com.lectranscript"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339633717297-u5gts3m5gf3e43t3a06u4jipp8jth1tl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt6o_lhNy0BZ9wrqBzqNieIpV7fMz-f7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339633717297-u5gts3m5gf3e43t3a06u4jipp8jth1tl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
