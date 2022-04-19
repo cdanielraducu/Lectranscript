@@ -1,0 +1,6 @@
+module Pods_Lectranscript_LectranscriptTests {
+  umbrella header "Pods-Lectranscript-LectranscriptTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
