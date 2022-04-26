@@ -54,6 +54,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FirebaseStorage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Flipper-Boost-iOSX.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -160,6 +165,16 @@
 			<false/>
 		</dict>
 		<key>RNFBFirestore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RNFBStorage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RNSVG.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -340,6 +355,11 @@
 			<false/>
 		</dict>
 		<key>nanopb.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-document-picker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
