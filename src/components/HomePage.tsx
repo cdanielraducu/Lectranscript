@@ -13,6 +13,7 @@ import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import storage, { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import DocumentPicker from "react-native-document-picker";
 import * as Progress from "react-native-progress";
+import { Picker } from "@react-native-picker/picker";
 
 interface HomePageProps {
   user: FirebaseAuthTypes.User;
@@ -65,8 +66,6 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
     </TouchableOpacity>
   );
 
-
-
   const onSignOut = () => {
     setIsLoading(true);
 
@@ -117,7 +116,6 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
         >
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
-        
       </>
 
       <Progress.Bar
