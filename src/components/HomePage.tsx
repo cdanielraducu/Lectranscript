@@ -15,17 +15,21 @@ import DocumentPicker from "react-native-document-picker";
 import * as Progress from "react-native-progress";
 import { Modalize } from "react-native-modalize";
 import { TextInput } from "react-native-gesture-handler";
+import { logout } from "../app/profileSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 interface HomePageProps {
-  user: FirebaseAuthTypes.User;
-  setUser: (user?: FirebaseAuthTypes.User) => void;
   setIsLoading: (val: boolean) => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
+const HomePage: React.FC<HomePageProps> = ({ setIsLoading }) => {
   const [registrations, setRegistrations] = useState<
     FirebaseStorageTypes.Reference[]
   >([]);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.profile.user);
 
   const reference = useMemo(() => storage().ref(`${user?.uid}/original`), []);
 
@@ -182,7 +186,7 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
       .signOut()
       .then(() => {
         console.log("Signed out!");
-        setUser(undefined);
+        dispatch(logout());
       })
       .catch((error) => {
         console.error(error);
@@ -214,7 +218,9 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
     });
   };
 
-  console.log(selectedReference?.name);
+  if (!user) {
+    return <Text>Error</Text>;
+  }
 
   return (
     <>

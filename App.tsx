@@ -4,6 +4,9 @@ import firestore from "@react-native-firebase/firestore";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import HomePage from "./src/components/HomePage";
 import AuthPage from "./src/components/AuthPage";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./src/app/store";
+import { login } from "./src/app/profileSlice";
 
 export type DocumentData = {
   [field: string]: any;
@@ -21,14 +24,21 @@ export type DocumentData = {
     );
  */
 
-const App: React.FC = () => {
-  const [user, setUser] = useState<FirebaseAuthTypes.User>();
+export interface User {
+  email: string;
+  uid: string;
+}
 
+const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const loggedIn = useSelector((state: RootState) => state.profile.loggedIn);
+  const dispatch = useDispatch();
 
   const onAuth = (user: FirebaseAuthTypes.User | null) => {
     if (user) {
-      setUser(user);
+      const ourUser = { email: user.email, uid: user.uid } as User;
+      dispatch(login({ user: ourUser }));
     }
   };
 
@@ -43,12 +53,8 @@ const App: React.FC = () => {
         <ActivityIndicator />
       ) : (
         <>
-          {user ? (
-            <HomePage
-              user={user}
-              setUser={setUser}
-              setIsLoading={setIsLoading}
-            />
+          {loggedIn ? (
+            <HomePage setIsLoading={setIsLoading} />
           ) : (
             <AuthPage setIsLoading={setIsLoading} />
           )}
