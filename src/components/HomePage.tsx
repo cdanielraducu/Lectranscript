@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -13,7 +13,8 @@ import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import storage, { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import DocumentPicker from "react-native-document-picker";
 import * as Progress from "react-native-progress";
-import { Picker } from "@react-native-picker/picker";
+import { Modalize } from "react-native-modalize";
+import { TextInput } from "react-native-gesture-handler";
 
 interface HomePageProps {
   user: FirebaseAuthTypes.User;
@@ -30,6 +31,8 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
 
   const [fileUploadProgress, setFileUploadProgress] = useState(0);
 
+  const [newReferenceName, setNewReferenceName] = useState("");
+
   const getRegistrations = () => {
     reference.listAll().then((res) => {
       setRegistrations(res.items);
@@ -39,6 +42,116 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
   useEffect(() => {
     getRegistrations();
   }, [user]);
+
+  const openReferenceUrl = (item: FirebaseStorageTypes.Reference) => {
+    item.getDownloadURL().then((res) => {
+      Linking.openURL(res).catch((err) => console.error("Error", err));
+    });
+  };
+
+  const deleteReferenece = (item: FirebaseStorageTypes.Reference) => {
+    item.delete().then(() => {
+      getRegistrations();
+    });
+  };
+
+  const renameReferenceUrl = (item: FirebaseStorageTypes.Reference) => {
+    item.getDownloadURL().then((url) => {
+      fetch(url)
+        .then((res) => {
+          return res.blob();
+        })
+        .then((blob) => {
+          const task = storage()
+            .ref(`/o1ZWe1fQeuMDT4HvVP46sLJsQDK2/original/${newReferenceName}`)
+            .put(blob);
+
+          task.on("state_changed", (taskSnapshot) => {
+            console.log(
+              `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
+            );
+            setFileUploadProgress(
+              taskSnapshot.bytesTransferred / taskSnapshot.totalBytes
+            );
+            getRegistrations();
+          });
+
+          task.then(() => {
+            setFileUploadProgress(0);
+            setNewReferenceName("");
+            deleteReferenece(item);
+          });
+        });
+    });
+  };
+
+  const [selectedReference, setSelectedReference] =
+    useState<FirebaseStorageTypes.Reference>();
+
+  const renameModalizeRef = useRef<Modalize>(null);
+
+  const onOpenRenameModal = () => {
+    renameModalizeRef.current?.open();
+  };
+
+  const onCloseRenameModal = () => {
+    renameModalizeRef.current?.close();
+  };
+
+  const renameModalize = (
+    <Modalize
+      HeaderComponent={
+        <View style={styles.modalHeader}>
+          <Text style={styles.modalHeaderText}>Noul nume</Text>
+        </View>
+      }
+      snapPoint={240}
+      ref={renameModalizeRef}
+    >
+      <View style={styles.modalContentContainer}>
+        <TextInput
+          placeholder="Nume nou..."
+          value={newReferenceName}
+          onChangeText={setNewReferenceName}
+          textAlign="left"
+          autoCapitalize="none"
+          style={styles.textInput}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            if (selectedReference) {
+              renameReferenceUrl(selectedReference);
+            }
+            onCloseRenameModal();
+          }}
+          style={styles.optionItem}
+        >
+          <Text>Redenumeste 🪆</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            onCloseRenameModal();
+          }}
+          style={styles.optionItem}
+        >
+          <Text>Inchide modala ❌</Text>
+        </TouchableOpacity>
+      </View>
+    </Modalize>
+  );
+
+  const modalizeRef = useRef<Modalize>(null);
+
+  const onOpenModal = (selectedReference?: FirebaseStorageTypes.Reference) => {
+    if (selectedReference) {
+      setSelectedReference(selectedReference);
+      modalizeRef.current?.open();
+    }
+  };
+
+  const onCloseModal = () => {
+    modalizeRef.current?.close();
+  };
 
   const renderItem = ({
     item,
@@ -54,11 +167,7 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
         styles.listItem,
         index % 2 === 0 ? styles.columnSpacing : undefined,
       ]}
-      onPress={() => {
-        item.getDownloadURL().then((res) => {
-          Linking.openURL(res).catch((err) => console.error("Error", err));
-        });
-      }}
+      onPress={() => onOpenModal(item)}
     >
       <Text numberOfLines={2} style={styles.listItemText}>
         {item.name}
@@ -105,6 +214,8 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
     });
   };
 
+  console.log(selectedReference?.name);
+
   return (
     <>
       <>
@@ -138,6 +249,53 @@ const HomePage: React.FC<HomePageProps> = ({ user, setUser, setIsLoading }) => {
       <TouchableOpacity activeOpacity={0.5} onPress={onSignOut}>
         <Text>Sign Out</Text>
       </TouchableOpacity>
+      <Modalize
+        HeaderComponent={
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalHeaderText}>Optiuni</Text>
+          </View>
+        }
+        snapPoint={240}
+        ref={modalizeRef}
+      >
+        <View style={styles.modalContentContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              if (selectedReference) {
+                openReferenceUrl(selectedReference);
+              }
+              onCloseModal();
+            }}
+            style={styles.optionItem}
+          >
+            <Text>Deschide ✔️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onCloseModal} style={styles.optionItem}>
+            <Text>Transpileaza 📝</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              onOpenRenameModal();
+              onCloseModal();
+            }}
+            style={styles.optionItem}
+          >
+            <Text>Redenumeste 🪆</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (selectedReference) {
+                deleteReferenece(selectedReference);
+              }
+              onCloseModal();
+            }}
+            style={styles.optionItem}
+          >
+            <Text>Sterge 🪓</Text>
+          </TouchableOpacity>
+        </View>
+      </Modalize>
+      {renameModalize}
     </>
   );
 };
@@ -178,6 +336,32 @@ const styles = StyleSheet.create({
   },
   progressBarVisible: {
     borderColor: "black",
+  },
+  modalHeader: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 8,
+    borderBottomColor: "#cecece",
+    borderBottomWidth: 1,
+  },
+  modalHeaderText: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  modalContentContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+  },
+  optionItem: {
+    paddingVertical: 8,
+  },
+  textInput: {
+    fontSize: 16,
+    backgroundColor: "#eeeeee",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 16,
+    marginBottom: 12,
   },
 });
 

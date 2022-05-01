@@ -154,11 +154,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>RNCPicker.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>RNFBApp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -175,6 +170,11 @@
 			<false/>
 		</dict>
 		<key>RNFBStorage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RNGestureHandler.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
