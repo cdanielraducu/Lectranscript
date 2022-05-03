@@ -184,21 +184,6 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
     </TouchableOpacity>
   );
 
-  const onSignOut = () => {
-    setIsLoading(true);
-
-    auth()
-      .signOut()
-      .then(() => {
-        console.log("Signed out!");
-        dispatch(logout());
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => setIsLoading(false));
-  };
-
   const onAddVideo = async () => {
     await DocumentPicker.pickSingle().then((res) => {
       console.log(res.uri);
@@ -223,14 +208,6 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
     });
   };
 
-  const navigateToSettingsPage = () => {
-    return Navigation.push(componentId, {
-      component: {
-        name: "SettingsPage",
-      },
-    });
-  };
-
   if (!user) {
     return <Text>Error</Text>;
   }
@@ -238,7 +215,7 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
   return (
     <>
       <>
-        <Text>Welcome {user.email}</Text>
+        <Text>Welcome {user?.displayName ?? user.email}</Text>
         <TouchableOpacity
           onPress={onAddVideo}
           activeOpacity={0.5}
@@ -277,9 +254,7 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
       >
         <Text>Settings</Text>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.5} onPress={onSignOut}>
-        <Text>Sign Out</Text>
-      </TouchableOpacity>
+
       <Modalize
         HeaderComponent={
           <View style={styles.modalHeader}>

@@ -27,6 +27,7 @@ export type DocumentData = {
 export interface User {
   email: string;
   uid: string;
+  displayName: string;
 }
 
 export interface NavigationComponentProps {
@@ -41,7 +42,11 @@ const App: React.FC<NavigationComponentProps> = ({ componentId }) => {
 
   const onAuth = (user: FirebaseAuthTypes.User | null) => {
     if (user) {
-      const ourUser = { email: user.email, uid: user.uid } as User;
+      const ourUser = {
+        email: user.email,
+        uid: user.uid,
+        displayName: user.displayName,
+      } as User;
       dispatch(login({ user: ourUser }));
     }
   };
