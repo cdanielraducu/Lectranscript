@@ -18,12 +18,17 @@ import { TextInput } from "react-native-gesture-handler";
 import { logout } from "../app/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
+import { Navigation } from "react-native-navigation";
+import { NavigationComponentProps } from "../../App";
 
 interface HomePageProps {
   setIsLoading: (val: boolean) => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ setIsLoading }) => {
+const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
+  setIsLoading,
+  componentId,
+}) => {
   const [registrations, setRegistrations] = useState<
     FirebaseStorageTypes.Reference[]
   >([]);
@@ -218,6 +223,14 @@ const HomePage: React.FC<HomePageProps> = ({ setIsLoading }) => {
     });
   };
 
+  const navigateToSettingsPage = () => {
+    return Navigation.push(componentId, {
+      component: {
+        name: "SettingsPage",
+      },
+    });
+  };
+
   if (!user) {
     return <Text>Error</Text>;
   }
@@ -252,6 +265,18 @@ const HomePage: React.FC<HomePageProps> = ({ setIsLoading }) => {
         data={registrations}
         renderItem={renderItem}
       />
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() =>
+          Navigation.showOverlay({
+            component: {
+              name: "SettingsPage",
+            },
+          })
+        }
+      >
+        <Text>Settings</Text>
+      </TouchableOpacity>
       <TouchableOpacity activeOpacity={0.5} onPress={onSignOut}>
         <Text>Sign Out</Text>
       </TouchableOpacity>

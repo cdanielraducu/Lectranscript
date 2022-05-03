@@ -29,7 +29,11 @@ export interface User {
   uid: string;
 }
 
-const App: React.FC = () => {
+export interface NavigationComponentProps {
+  componentId: string;
+}
+
+const App: React.FC<NavigationComponentProps> = ({ componentId }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const loggedIn = useSelector((state: RootState) => state.profile.loggedIn);
@@ -54,7 +58,7 @@ const App: React.FC = () => {
       ) : (
         <>
           {loggedIn ? (
-            <HomePage setIsLoading={setIsLoading} />
+            <HomePage setIsLoading={setIsLoading} componentId={componentId} />
           ) : (
             <AuthPage setIsLoading={setIsLoading} />
           )}
