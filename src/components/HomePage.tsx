@@ -20,6 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { Navigation } from "react-native-navigation";
 import { NavigationComponentProps } from "../../App";
+import TrackPlayer, {
+  Event,
+  Track,
+  useTrackPlayerEvents,
+} from "react-native-track-player";
 
 interface HomePageProps {
   setIsLoading: (val: boolean) => void;
@@ -212,10 +217,81 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
     return <Text>Error</Text>;
   }
 
+  const [track, setTrack] = useState<Track | null>(null);
+
+  // useEffect(() => {
+  //   registrations?.[0]?.getDownloadURL().then((res) => {
+  //     TrackPlayer.add([{ url: res, title: "audio", artist: "unkown" }]).then(
+  //       () => {
+  //         // TrackPlayer.play();
+  //       }
+  //     );
+  //   });
+  // }, [registrations]);
+
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async (event) => {
+    if (
+      event.type === Event.PlaybackTrackChanged &&
+      event.nextTrack !== null &&
+      event.nextTrack !== undefined
+    ) {
+      const track = await TrackPlayer.getTrack(event?.nextTrack);
+
+      setTrack(track);
+    } else {
+      setTrack(null);
+    }
+  });
+
+  const startListeningToReference = (
+    selectedReference: FirebaseStorageTypes.Reference
+  ) => {
+    selectedReference.getDownloadURL().then((res) => {
+      TrackPlayer.getCurrentTrack()
+        .then((res) => {
+          if (res !== null && res !== undefined) {
+            TrackPlayer.stop();
+          }
+        })
+        .finally(() => {
+          TrackPlayer.add([
+            { url: res, title: selectedReference.name, artist: "unknown" },
+          ]).then(() => {
+            TrackPlayer.play();
+          });
+        });
+    });
+  };
+
+  const stopListeningToReference = () => {
+    TrackPlayer.stop();
+  };
+
+  // const [isPlaying, setIsPlaying] = useState(false);
+
+  // useEffect(() => {
+  //   TrackPlayer.getCurrentTrack().then((res) => {
+  //     setIsPlaying(res !== null && res !== undefined);
+  //   });
+  // }, [track]);
+
   return (
     <>
       <>
         <Text>Welcome {user?.displayName ?? user.email}</Text>
+        {track && (
+          <View style={styles.trackShortcutContainer}>
+            <Text>{track?.title}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                TrackPlayer.stop();
+              }}
+              style={styles.optionItem}
+            >
+              <Text>➖</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <TouchableOpacity
           onPress={onAddVideo}
           activeOpacity={0.5}
@@ -261,7 +337,7 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
             <Text style={styles.modalHeaderText}>Optiuni</Text>
           </View>
         }
-        snapPoint={240}
+        snapPoint={280}
         ref={modalizeRef}
       >
         <View style={styles.modalContentContainer}>
@@ -276,8 +352,30 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
           >
             <Text>Deschide ✔️</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (selectedReference) {
+                startListeningToReference(selectedReference);
+              }
+              onCloseModal();
+            }}
+            style={styles.optionItem}
+          >
+            <Text>Asculta ➕</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (selectedReference) {
+                stopListeningToReference();
+              }
+              onCloseModal();
+            }}
+            style={styles.optionItem}
+          >
+            <Text>Opreste ➖</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={onCloseModal} style={styles.optionItem}>
-            <Text>Transpileaza 📝</Text>
+            <Text>Transpileaza 📝 (coming soon)</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -368,6 +466,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 16,
     marginBottom: 12,
+  },
+  trackShortcutContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 

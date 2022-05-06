@@ -8,6 +8,9 @@ import { store } from "./src/app/store";
 import { Provider } from "react-redux";
 import { Navigation } from "react-native-navigation";
 import SettingsPage from "./src/components/SettingsPage";
+import TrackPlayer from 'react-native-track-player';
+
+
 
 const app = () => (
   <Provider store={store}>
@@ -35,31 +38,4 @@ Navigation.events().registerAppLaunchedListener(async () => {
   });
 });
 
-//  Navigation.push(props.componentId, {
-//           component: {
-//             name: 'Settings',
-//             options: {
-//               topBar: {
-//                 title: {
-//                   text: 'Settings'
-//                 }
-//               }
-//             }
-//           }
-//         })
-
-// Navigation.events().registerAppLaunchedListener(async () => {
-//   Navigation.setRoot({
-//     root: {
-//       stack: {
-//         children: [
-//           {
-//             component: {
-//               name: 'Home'
-//             }
-//           }
-//         ]
-//       }
-//     }
-//   });
-// });
+TrackPlayer.registerPlaybackService(() => require('./src/service'));

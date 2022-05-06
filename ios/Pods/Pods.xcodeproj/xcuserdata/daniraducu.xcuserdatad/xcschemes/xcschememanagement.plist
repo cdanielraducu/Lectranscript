@@ -189,6 +189,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>RNVectorIcons.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>React-Codegen.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -314,6 +319,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SwiftAudioEx.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Yoga.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -375,6 +385,16 @@
 			<false/>
 		</dict>
 		<key>react-native-document-picker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-slider.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>react-native-track-player.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

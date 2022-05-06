@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Navigation, NavigationComponentProps } from "react-native-navigation";
@@ -7,6 +7,10 @@ import { logout } from "../app/profileSlice";
 import auth from "@react-native-firebase/auth";
 import { store } from "../app/store";
 import { Modalize } from "react-native-modalize";
+import TrackPlayer, {
+  Event,
+  useTrackPlayerEvents,
+} from "react-native-track-player";
 
 const SettingsPage: React.FC<NavigationComponentProps> = ({ componentId }) => {
   return (
