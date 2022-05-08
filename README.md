@@ -11,7 +11,7 @@ dani@tmail.com
 SuperSecretPassword
 
 
-Video:
+Video (se incarca mai repede videoclipul daca e descarcat):
 https://user-images.githubusercontent.com/44604753/167314368-fbab9b8b-6e0e-4b47-9801-9507300124ec.mov
 
 Bug existent:
