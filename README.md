@@ -10,3 +10,9 @@ Un exemplu de username si parola pentru utilizator:
 dani@tmail.com
 SuperSecretPassword
 
+
+Video:
+https://user-images.githubusercontent.com/44604753/167314368-fbab9b8b-6e0e-4b47-9801-9507300124ec.mov
+
+Bug existent:
+Nu se schimba automat displayName-ul la utilizator. Dar daca dau sign-out & sign-in o sa-l vedem schimbat in baza de date din firebase.
