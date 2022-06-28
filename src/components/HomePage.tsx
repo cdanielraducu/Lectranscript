@@ -194,7 +194,7 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
       console.log(res.uri);
 
       const task = storage()
-        .ref(`/o1ZWe1fQeuMDT4HvVP46sLJsQDK2/original/${res.name}`)
+        .ref(`/${user?.uid}/original/${res.name}`)
         .putFile(res.uri);
 
       task.on("state_changed", (taskSnapshot) => {
@@ -275,6 +275,76 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
   //   });
   // }, [track]);
 
+  const onTranspilePress = async (
+    selectedReference?: FirebaseStorageTypes.Reference
+  ) => {
+    if (!selectedReference) return;
+    console.log(selectedReference.fullPath);
+
+    setFileUploadProgress(0.01);
+
+    fetch(
+      `https://us-central1-lectranscript.cloudfunctions.net/app/transpile/?file=${selectedReference.fullPath}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then(async (json) => {
+        console.log(json);
+
+        const filesLength = parseInt(json.files.length);
+        if (filesLength === 0) {
+          console.log("ERROR: fileLenght - ", filesLength);
+        } else {
+          console.log(filesLength);
+        }
+
+        let index = 0;
+        do {
+          console.log(filesLength);
+          console.log(index);
+          const sendFile = index + 11 >= filesLength;
+          console.log("sendFile:", sendFile);
+          await fetch(
+            `https://us-central1-lectranscript.cloudfunctions.net/app/transcript/?l=${index}&h=${
+              index + 10
+            }&sendFile=${sendFile}`,
+            {
+              method: "GET",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          )
+            .then((response) => response.json())
+            .then((json) => {
+              console.log(json);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+          index = index + 11;
+          setFileUploadProgress(
+            parseInt((index / filesLength).toFixed(2)) * 100
+          );
+        } while (index < filesLength);
+
+        setFileUploadProgress(0);
+      })
+      .catch((e) => {
+        console.log(e);
+        setFileUploadProgress(0);
+      });
+  };
+
   return (
     <>
       <>
@@ -300,18 +370,28 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
           <Text style={styles.addButtonText}>+</Text>
         </TouchableOpacity>
       </>
-
-      <Progress.Bar
-        progress={fileUploadProgress}
-        color="black"
-        unfilledColor="white"
-        width={200}
-        style={
-          fileUploadProgress === 0
-            ? styles.progressBarInvisible
-            : styles.progressBarVisible
-        }
-      />
+      <View style={styles.progressContainer}>
+        <Progress.Bar
+          progress={fileUploadProgress}
+          color="black"
+          unfilledColor="white"
+          width={200}
+          style={
+            fileUploadProgress === 0
+              ? styles.progressBarInvisible
+              : styles.progressBarVisible
+          }
+        />
+        <Text
+          style={
+            fileUploadProgress === 0
+              ? styles.textProgressBarInvisible
+              : styles.textProgressBarVisible
+          }
+        >
+          {` ${Math.floor(fileUploadProgress * 100)}`}%
+        </Text>
+      </View>
       <FlatList
         numColumns={2}
         style={styles.list}
@@ -374,8 +454,13 @@ const HomePage: React.FC<NavigationComponentProps & HomePageProps> = ({
           >
             <Text>Opreste ➖</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onCloseModal} style={styles.optionItem}>
-            <Text>Transpileaza 📝 (coming soon)</Text>
+          <TouchableOpacity
+            onPress={() => {
+              onTranspilePress(selectedReference);
+            }}
+            style={styles.optionItem}
+          >
+            <Text>Transpileaza 📝</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
@@ -435,12 +520,23 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#fff",
   },
+  progressContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   progressBarInvisible: {
     borderColor: "white",
+  },
+  textProgressBarInvisible: {
+    color: "white",
   },
   progressBarVisible: {
     borderColor: "black",
   },
+  textProgressBarVisible: {
+    color: "black",
+  },
+
   modalHeader: {
     paddingHorizontal: 20,
     paddingTop: 16,

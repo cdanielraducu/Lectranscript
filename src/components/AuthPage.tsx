@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, Pressable, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  Pressable,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 interface AuthPageProps {
@@ -19,18 +26,18 @@ const AuthPage: React.FC<AuthPageProps> = ({ setIsLoading }) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        console.log("User account created & signed in!");
+        Alert.alert("User account created & signed in!");
       })
       .catch((error) => {
         if (error.code === "auth/email-already-inuse") {
-          console.log("That email address is already in use!");
+          Alert.alert("That email address is already in use!");
         }
 
         if (error.code === "auth/invalid-email") {
-          console.log("That email address is invalid");
+          Alert.alert("That email address is invalid");
         }
 
-        console.error(error);
+        Alert.alert(error.message);
       })
       .finally(() => setIsLoading(false));
   };
@@ -40,13 +47,13 @@ const AuthPage: React.FC<AuthPageProps> = ({ setIsLoading }) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        console.log("Signed in!");
+        Alert.alert("Signed in!");
       })
       .catch((error) => {
         if (error.code === "auth/wrong-password") {
-          console.log("Password is invalid");
+          Alert.alert("Password is invalid");
         }
-        console.error(error);
+        Alert.alert(error.message);
       })
       .finally(() => setIsLoading(false));
   };

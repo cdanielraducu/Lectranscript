@@ -4,7 +4,17 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Lectranscript.iml" filepath="$PROJECT_DIR$/.idea/modules/Lectranscript.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Lectranscript.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Lectranscript.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-803096392/Lectranscript.react-native-community_slider.iml" filepath="$PROJECT_DIR$/.idea/modules/-803096392/Lectranscript.react-native-community_slider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1579641951/Lectranscript.react-native-document-picker.iml" filepath="$PROJECT_DIR$/.idea/modules/-1579641951/Lectranscript.react-native-document-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1155759222/Lectranscript.react-native-firebase_app.iml" filepath="$PROJECT_DIR$/.idea/modules/-1155759222/Lectranscript.react-native-firebase_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2079245087/Lectranscript.react-native-firebase_auth.iml" filepath="$PROJECT_DIR$/.idea/modules/2079245087/Lectranscript.react-native-firebase_auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/865757460/Lectranscript.react-native-firebase_firestore.iml" filepath="$PROJECT_DIR$/.idea/modules/865757460/Lectranscript.react-native-firebase_firestore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-753556124/Lectranscript.react-native-firebase_storage.iml" filepath="$PROJECT_DIR$/.idea/modules/-753556124/Lectranscript.react-native-firebase_storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-483922201/Lectranscript.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-483922201/Lectranscript.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1077488229/Lectranscript.react-native-navigation.iml" filepath="$PROJECT_DIR$/.idea/modules/-1077488229/Lectranscript.react-native-navigation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/2133805573/Lectranscript.react-native-svg.iml" filepath="$PROJECT_DIR$/.idea/modules/2133805573/Lectranscript.react-native-svg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1485289186/Lectranscript.react-native-track-player.iml" filepath="$PROJECT_DIR$/.idea/modules/1485289186/Lectranscript.react-native-track-player.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-642520497/Lectranscript.react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/-642520497/Lectranscript.react-native-vector-icons.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1871495302/react-native-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/-1871495302/react-native-gradle-plugin.iml" />
     </modules>
   </component>
